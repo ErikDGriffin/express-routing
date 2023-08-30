@@ -1,14 +1,19 @@
-import express from "express";
-import userRouter from "./users.routes"; 
+import dotenv from "dotenv";
 
-const router = express.Router();
+// ensures that env variables are loaded
+const envFound = dotenv.config();
 
-router.get("/test", (req, res) => {
-  res.send("working");
-});
+if (!envFound) {
+  throw new Error("Couldn't find .env!");
+}
 
-router.use("/users", userRouter); 
-
-export default router;
-
-
+// exports env variables for use
+export default {
+  mysql: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_SCHEMA,
+  },
+  port: parseInt(process.env.PORT),
+};
